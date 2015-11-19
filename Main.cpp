@@ -45,7 +45,7 @@ public:
     }
 
     AABB(int left, int right, int top, int bottom)
-        : position{ left + (right - left) / 2, top + (bottom - top) / 2 },
+        : position{left + (right - left) / 2, top + (bottom - top) / 2},
           halfSize{(right - left) / 2, (bottom - top) / 2}
     {
     }
@@ -54,12 +54,87 @@ public:
     {
         position += offset;
     }
+
+    const auto& getPosition() const noexcept
+    {
+        return position;
+    }
+
+    int getX() const noexcept
+    {
+        return position.x;
+    }
+
+    int getY() const noexcept
+    {
+        return position.y;
+    }
+
+    int getLeft() const noexcept
+    {
+        return position.x - halfSize.x;
+    }
+
+    int getRight() const noexcept
+    {
+        return position.x + halfSize.x;
+    }
+
+    int getTop() const noexcept
+    {
+        return position.y - halfSize.y;
+    }
+
+    int getBottom() const noexcept
+    {
+        return position.x + halfSize.y;
+    }
+
+    bool isLeftOf(const AABB& other) const noexcept
+    {
+        return getRight() <= other.getLeft();
+    }
+
+    bool isRightOf(const AABB& other) const noexcept
+    {
+        return getLeft() >= other.getRight();
+    }
+
+    bool isAbove(const AABB& other) const noexcept
+    {
+        return getBottom() <= other.getTop();
+    }
+
+    bool isBelow(const AABB& other) const noexcept
+    {
+        return getTop() >= other.getBottom();
+    }
+
+    bool isOverlapping(const Vec2i& v) const noexcept
+    {
+        return v.x >= getLeft() && v.x < getRight() && v.y >= getTop() && v.y < getBottom();
+    }
+
+    bool isOverlapping(const AABB& other) const noexcept
+    {
+        return !isLeftOf(other) && !isRightOf(other) && !isAbove(other) && !isBelow(other);
+    }
+
+    bool constains(const Vec2i& v) const noexcept
+    {
+        return isOverlapping(v);
+    }
+
+    bool contains(const AABB& other) const noexcept
+    {
+        return other.getLeft() >= getLeft() && other.getRight() < getRight() && other.getTop() >= getTop() && other.getBottom() < getBottom();
+    }
 };
 
 class Application
 {
 public:
-    Application() 
+    Application()
         : m_Window{{1024, 768}, "SFML - AABB collision", sf::Style::Close},
           m_Position{100.f, 100.f},
           m_PrevPosition{m_Position}
@@ -70,11 +145,11 @@ public:
         auto result(m_DefaultFont.loadFromFile("C:/Windows/Fonts/verdana.ttf"));
         assert(result);
 
-        m_PlayerShape.setSize({ 50.f, 50.f });
+        m_PlayerShape.setSize({50.f, 50.f});
         m_PlayerShape.setOrigin(25.f, 25.f);
         m_PlayerShape.setFillColor(sf::Color::Black);
         m_PlayerShape.setPosition(m_Position);
-    
+
         m_FpsCounterText.setFont(m_DefaultFont);
         m_FpsCounterText.setCharacterSize(16u);
         m_FpsCounterText.setPosition(3.f, 3.f);
@@ -86,9 +161,8 @@ public:
         m_PlayerPosText.setPosition(3.f, 20.f);
         m_PlayerPosText.setColor(sf::Color::Black);
         m_PlayerPosText.setString("Player X: " + std::to_string(m_Position.x) + "\nPlayer Y: " + std::to_string(m_Position.y));
-
     }
-    
+
     void run()
     {
         static const auto timeStep(sf::seconds(1.f / 60.f));
@@ -132,7 +206,6 @@ private:
 
     void handleEvent(const sf::Event& event)
     {
-
     }
 
     void integrate(float timeStep)
@@ -169,8 +242,8 @@ private:
     {
         if (abs(m_Position.x - m_PrevPosition.x) < 0.1f && abs(m_Position.y - m_PrevPosition.y) < 0.1f) return;
 
-        Vec2f pos{m_Position.x*alpha + m_PrevPosition.x*(1.f - alpha),
-                         m_Position.y*alpha + m_PrevPosition.y*(1.f - alpha)};
+        Vec2f pos{m_Position.x * alpha + m_PrevPosition.x * (1.f - alpha),
+            m_Position.y * alpha + m_PrevPosition.y * (1.f - alpha)};
         m_PlayerPosText.setString("Player X: " + std::to_string(pos.x) + "\nPlayer Y: " + std::to_string(pos.y));
         m_PlayerShape.setPosition(pos);
     }
@@ -180,7 +253,7 @@ private:
         m_Window.clear(sf::Color::White);
         m_Window.draw(m_WallShape);
         m_Window.draw(m_PlayerShape);
-        
+
         m_Window.draw(m_FpsCounterText);
         m_Window.draw(m_PlayerPosText);
         m_Window.display();
@@ -189,7 +262,7 @@ private:
 private:
     sf::RenderWindow m_Window;
     sf::Font m_DefaultFont;
-    
+
     Vec2f m_Position;
     Vec2f m_PrevPosition;
 
@@ -209,4 +282,3 @@ int main()
     app->run();
     return 0;
 }
-
