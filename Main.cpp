@@ -142,7 +142,7 @@ public:
         m_Window.setVerticalSyncEnabled(true);
         m_Window.setKeyRepeatEnabled(false);
 
-        auto result(m_DefaultFont.loadFromFile("C:/Windows/Fonts/verdana.ttf"));
+        auto result(m_DefaultFont.loadFromFile("Sansation_Regular.ttf"));
         assert(result);
 
         m_PlayerShape.setSize({50.f, 50.f});
