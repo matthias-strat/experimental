@@ -1,2 +1,6 @@
-# Ignore build output
-Test
+# Ignore build directories
+./*/build/*
+./*/lib/*
+
+# Ignore temporary files
+*.tmp
