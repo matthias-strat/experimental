@@ -1,14 +1,12 @@
 #pragma once
 
-#include <functional>
-
 class Game
 {
 public:
-    std::function<void(const sf::Event&)> onEvent{nullptr};
-    std::function<void(float)> onUpdate{nullptr};
-    std::function<void()> onLoadContent{nullptr};
-    std::function<void(sf::RenderTarget&)> onDraw{nullptr};
+    Func<void(const sf::Event&)> onEvent{nullptr};
+    Func<void(float)> onUpdate{nullptr};
+    Func<void()> onLoadContent{nullptr};
+    Func<void(sf::RenderTarget&)> onDraw{nullptr};
 
     inline Game(unsigned int windowWidth, unsigned int windowHeight, const std::string& windowTitle)
         : m_Window{{windowWidth, windowHeight}, windowTitle, sf::Style::Close}
