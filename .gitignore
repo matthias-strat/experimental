@@ -1,6 +1,6 @@
 # Ignore build directories
-./*/build/*
-./*/lib/*
+*/build/*
+*/lib/*
 
 # Ignore temporary files
 *.tmp
