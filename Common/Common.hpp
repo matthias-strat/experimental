@@ -9,3 +9,8 @@
 
 #include "../Common/Aliases.hpp"
 #include "../Common/Game.hpp"
+
+inline constexpr int get1DIndexFrom2D(int x, int y, int width)
+{
+    return x + y * width;
+}

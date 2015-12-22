@@ -7,7 +7,7 @@ int main()
 {    
     sf::RectangleShape shape;
 
-    Game game{windowWidth, windowHeight, "SFML - Test"};
+    Game game{"SFML - Test", windowWidth, windowHeight};
     game.onLoadContent = [&shape]()
     {
         shape.setSize({static_cast<float>(rectWidth), static_cast<float>(rectHeight)});

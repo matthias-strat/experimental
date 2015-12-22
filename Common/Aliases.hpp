@@ -20,12 +20,14 @@ using UPtr = std::unique_ptr<T>;
 template <typename T>
 using SPtr = std::shared_ptr<T>;
 
+// std::make_unique<T> wrapper
 template <typename T, typename... TArgs>
 inline decltype(auto) mkUPtr(TArgs&&... args)
 {
     return std::make_unique<T>(FWD(args)...);
 }
 
+// std::make_shared<T> wrapper
 template <typename T, typename... TArgs>
 inline decltype(auto) mkSPtr(TArgs&&... args)
 {

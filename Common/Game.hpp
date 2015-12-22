@@ -6,10 +6,13 @@ public:
     Func<void(const sf::Event&)> onEvent{nullptr};
     Func<void(float)> onUpdate{nullptr};
     Func<void()> onLoadContent{nullptr};
+    Func<void(int)> onFpsUpdated{nullptr};
     Func<void(sf::RenderTarget&)> onDraw{nullptr};
 
-    inline Game(unsigned int windowWidth, unsigned int windowHeight, const std::string& windowTitle)
-        : m_Window{{windowWidth, windowHeight}, windowTitle, sf::Style::Close}
+    inline Game(const std::string& windowTitle, unsigned int windowWidth = 1024, unsigned int windowHeight = 768) noexcept
+        : m_Window{{windowWidth, windowHeight}, windowTitle},
+          m_WindowWidth{windowWidth},
+          m_WindowHeight{windowHeight}
     {
         m_Window.setVerticalSyncEnabled(true);
     }
@@ -17,6 +20,7 @@ public:
     inline void run()
     {
         safeInvoke(onLoadContent);
+        safeInvoke(onFpsUpdated, 0);
 
         static const auto timeStep(sf::seconds(1.f/60.f));
 
@@ -45,18 +49,41 @@ public:
                 safeInvoke(onUpdate, timeStep.asSeconds());
             }
 
+            updateFpsCounter(dt);
+
             m_Window.clear(sf::Color::White);
             safeInvoke(onDraw, m_Window);
             m_Window.display();
         }
     }
 
+    inline auto getWindowWidth() const noexcept { return m_WindowWidth; }
+    inline auto getWindowHeight() const noexcept { return m_WindowHeight; }
+
 private:
+    inline void updateFpsCounter(sf::Time deltaTime) noexcept
+    {
+        static const auto oneSecond(sf::seconds(1.f));
+        m_FpsCounterTime += deltaTime;
+        m_FpsCounter++;
+        if (m_FpsCounterTime >= oneSecond)
+        {
+            m_LastFps = m_FpsCounter;
+            m_FpsCounterTime -= oneSecond;
+            m_FpsCounter = 0;
+            safeInvoke(onFpsUpdated, m_LastFps);
+        }
+    }
+
+    // Safely invoke an std::function (check whether it is null)
     template <typename TFunc, typename... TArgs>
     inline static void safeInvoke(TFunc& func, TArgs&&... args)
     {
-        if (func != nullptr) func(std::forward<TArgs>(args)...);
+        if (func != nullptr) func(FWD(args)...);
     }
 
     sf::RenderWindow m_Window;
+    unsigned int m_WindowWidth, m_WindowHeight;
+    sf::Time m_FpsCounterTime{sf::Time::Zero};
+    std::size_t m_FpsCounter{0}, m_LastFps{0};
 };

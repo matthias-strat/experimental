@@ -25,7 +25,7 @@ REM Now compile all .cpp files in the temporary directory.
 IF NOT EXIST %tmpfile% GOTO nocxxfile
 ECHO Now compiling...
 IF NOT EXIST %bindir% MKDIR %bindir%
-g++ -DSFML_STATIC -std=c++14 -Os -o %exefile% @%tmpfile% -I%1 -IH:/SFML/include -LH:/SFML/lib/MinGW_510/x64 -lsfml-graphics-s -lfreetype -ljpeg -lsfml-window-s -lopengl32 -lgdi32 -lsfml-system-s -lwinmm
+g++ -DSFML_STATIC -std=c++14 -Os -o %exefile% @%tmpfile% -I%1 -IH:/SFML/include -IH:/lua-5.3.2/include -LH:/SFML/lib/MinGW_510/x64 -LH:/lua-5.3.2/lib -llua -lsfml-graphics-s -lfreetype -ljpeg -lsfml-window-s -lopengl32 -lgdi32 -lsfml-system-s -lwinmm
 GOTO success
 
 :notfound
