@@ -4,7 +4,7 @@ class Game
 {
 public:
     Func<void(const sf::Event&)> onEvent{nullptr};
-    Func<void(float)> onUpdate{nullptr};
+    Func<void(float)> onUpdate{nullptr}, onUpdateVariable{nullptr};
     Func<void()> onLoadContent{nullptr};
     Func<void(int)> onFpsUpdated{nullptr};
     Func<void(sf::RenderTarget&)> onDraw{nullptr};
@@ -50,6 +50,7 @@ public:
             }
 
             updateFpsCounter(dt);
+            safeInvoke(onUpdateVariable, dt.asSeconds());
 
             m_Window.clear(sf::Color::White);
             safeInvoke(onDraw, m_Window);
