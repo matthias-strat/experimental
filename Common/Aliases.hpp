@@ -13,6 +13,8 @@ using Vec2i = Vec2<int>;
 // STL shortcuts
 template <typename T>
 using Func = std::function<T>;
+template <typename... Ts>
+using Common = std::common_type_t<Ts...>;
 
 // Smart pointer shortcuts
 template <typename T>
