@@ -60,6 +60,7 @@ public:
 
     inline auto getWindowWidth() const noexcept { return m_WindowWidth; }
     inline auto getWindowHeight() const noexcept { return m_WindowHeight; }
+    inline sf::RenderWindow& getWindow() noexcept { return m_Window; }
 
 private:
     inline void updateFpsCounter(sf::Time deltaTime) noexcept

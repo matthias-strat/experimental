@@ -9,6 +9,7 @@
 
 #include "../Common/Aliases.hpp"
 #include "../Common/Game.hpp"
+#include "../Common/NinePatch.hpp"
 
 inline constexpr int get1DIndexFrom2D(int x, int y, int width)
 {
